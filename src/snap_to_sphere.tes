@@ -26,8 +26,23 @@ out vec3 sphere_fs_in;
 void main()
 {
   /////////////////////////////////////////////////////////////////////////////
-  // Replace with your code 
-  pos_fs_in = interpolate(gl_TessCoord, pos_es_in[0], pos_es_in[1], pos_es_in[2]);
+  // Replace with your code
+
+  mat4 m;
+  if (is_moon) { // shrink by 70% = scale by 0.3 factor
+    m=model(is_moon, animation_seconds)*uniform_scale(0.3);
+  } else {
+    m=identity();
+  }
+  mat4 mv = view*m;
+
+  sphere_fs_in = normalize(interpolate(gl_TessCoord, pos_es_in[0].xyz, pos_es_in[1].xyz, pos_es_in[2].xyz));
+  view_pos_fs_in = mv*vec4(sphere_fs_in,1); // view and model applied
+  pos_fs_in = proj*view_pos_fs_in; // projection, view, and model applied
+
+  // simply inverse and transpose original model matrix then apply it to sphere to get normal
+  normal_fs_in = (inverse(transpose(mat3(m))) * sphere_fs_in).xyz;
+
   gl_Position = pos_fs_in;
   /////////////////////////////////////////////////////////////////////////////
 }

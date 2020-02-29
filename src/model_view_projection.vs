@@ -25,6 +25,10 @@ void main()
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 
-  pos_cs_in = vec4(pos_vs_in,1.0);
+  if (is_moon) { // shrink by 70% = scale by 0.3 factor
+    pos_cs_in = proj*view*model(is_moon, animation_seconds)*uniform_scale(0.3)*vec4(pos_vs_in,1.0);
+  } else {
+    pos_cs_in = proj*view*vec4(pos_vs_in,1.0);
+  }
   /////////////////////////////////////////////////////////////////////////////
 }

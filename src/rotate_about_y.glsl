@@ -6,7 +6,13 @@ mat4 rotate_about_y(float theta)
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 
-  return identity();
+  float c = cos(theta);
+  float s = sin(theta);
+  return mat4(
+    c,0,s,0,
+    0,1,0,0,
+    -s,0,c,0,
+    0,0,0,1);
   /////////////////////////////////////////////////////////////////////////////
 }
 

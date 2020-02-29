@@ -11,6 +11,12 @@ mat4 model(bool is_moon, float time)
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 
-  return identity();
+  if (!is_moon)
+    return identity();
+  
+  float theta = -0.5*M_PI*time;
+  return rotate_about_y(theta)*translate(vec3(2,0,0));
+
+  
   /////////////////////////////////////////////////////////////////////////////
 }
