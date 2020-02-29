@@ -7,7 +7,8 @@ void tangent(in vec3 N, out vec3 T, out vec3 B)
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 
-  T = vec3(1,0,0);
-  B = vec3(0,1,0);
+  // two random orthogonal vectors (dot product zero with each other)
+  T = vec3(N.x,-0.5*N.y,0.5*N.z);
+  B = cross(N,T);
   /////////////////////////////////////////////////////////////////////////////
 }

@@ -19,6 +19,22 @@ void main()
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 
-  color = vec3(1,1,1);
+  float theta = 0.2*M_PI*animation_seconds;
+
+  float perlin = perlin_noise(sphere_fs_in);
+  float stripex = 0.5*sin(sphere_fs_in.x*perlin*2*M_PI)+1;
+  float stripey = 0.5*sin(sphere_fs_in.y*perlin*7*M_PI)+1;
+  float stripez = 0.5*sin(sphere_fs_in.y*perlin*20*M_PI)+1;
+  float r = (stripex+stripey+stripez)/3;
+
+  vec3 ka = is_moon ? vec3(0.1,0.1,0.1) : vec3(0,0,0.1);
+  vec3 kd = is_moon ? vec3(0.5,0.5,0.5) : vec3(0.1*r,0.2*r,0.9*r);
+  vec3 ks = vec3(0.3,0.3,0.3);
+  float p = 1000;
+  vec3 n = normalize(normal_fs_in);
+  vec3 v = -normalize(view_pos_fs_in.xyz); 
+  vec3 l = normalize(vec3(sin(theta), 1, cos(theta)));
+
+  color = blinn_phong(ka,kd,ks,p,n,v,l);
   /////////////////////////////////////////////////////////////////////////////
 }
