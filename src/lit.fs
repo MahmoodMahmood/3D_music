@@ -18,6 +18,15 @@ void main()
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 
-  color = vec3(1,1,1);
+  float theta = 0.2*M_PI*animation_seconds;
+
+  vec3 ka = is_moon ? vec3(0.1,0.1,0.1) : vec3(0,0,0.2);
+  vec3 kd = is_moon ? vec3(0.5,0.5,0.5) : vec3(0,0,1);
+  vec3 ks = vec3(0.3,0.3,0.3);
+  float p = 100;
+  vec3 n = normalize(normal_fs_in);
+  vec3 v = -normalize(view_pos_fs_in.xyz); 
+  vec3 l = normalize(vec3(sin(theta), 1, cos(theta)));
+  color = blinn_phong(ka,kd,ks,p,n,v,l);
   /////////////////////////////////////////////////////////////////////////////
 }
