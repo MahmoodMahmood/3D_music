@@ -8,7 +8,7 @@ void tangent(in vec3 N, out vec3 T, out vec3 B)
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 
   // two random orthogonal vectors (dot product zero with each other)
-  T = vec3(N.x,-0.5*N.y,0.5*N.z);
+  T = (vec4(N,1) * rotate_about_y(M_PI/4)).xyz;
   B = cross(N,T);
   /////////////////////////////////////////////////////////////////////////////
 }

@@ -6,7 +6,7 @@
 // Values between  -½ and ½ ?
 //
 // expects: random_direction, improved_smooth_step
-float improved_perlin_noise( vec3 st) 
+float improved_perlin_noise(vec3 st) 
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 

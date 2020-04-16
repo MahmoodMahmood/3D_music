@@ -5,7 +5,6 @@
 uniform mat4 view;
 uniform mat4 proj;
 uniform float animation_seconds;
-uniform bool is_moon;
 // Inputs:
 in vec3 sphere_fs_in;
 in vec3 normal_fs_in;
@@ -21,14 +20,14 @@ void main()
   // Replace with your code 
   float theta = 0.2*M_PI*animation_seconds;
 
-  float perlin = perlin_noise(sphere_fs_in);
+  float perlin = improved_perlin_noise(sphere_fs_in);
   float stripex = 0.5*sin(sphere_fs_in.x*perlin*2*M_PI)+1;
   float stripey = 0.5*sin(sphere_fs_in.y*perlin*7*M_PI)+1;
   float stripez = 0.5*sin(sphere_fs_in.y*perlin*20*M_PI)+1;
   float r = (stripex+stripey+stripez)/3;
 
-  vec3 ka = is_moon ? vec3(0.1,0.1,0.1) : vec3(0,0,0.1);
-  vec3 kd = is_moon ? vec3(0.5,0.5,0.5) : vec3(0.1*r,0.2*r,0.9*r);
+  vec3 ka = vec3(0.1,0.1,0.1);
+  vec3 kd = vec3(0.5,0.5,0.5);
   vec3 ks = vec3(0.3,0.3,0.3);
   float p = 1000;
   vec3 n = normalize(normal_fs_in);

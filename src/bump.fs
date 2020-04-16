@@ -5,7 +5,6 @@
 uniform mat4 view;
 uniform mat4 proj;
 uniform float animation_seconds;
-uniform bool is_moon;
 // Inputs:
 //                     linearly interpolated from tessellation evaluation shader
 //                     output
@@ -23,12 +22,12 @@ void main()
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code 
   
-  float tf = 0.0001;
+  float tf = 0.00001;
   vec3 T,B;
   tangent(sphere_fs_in, T, B);
-  vec3 x = bump_position(is_moon,sphere_fs_in);
-  vec3 x1 = bump_position(is_moon,sphere_fs_in+T*tf);
-  vec3 x2 = bump_position(is_moon,sphere_fs_in+B*tf);
+  vec3 x = bump_position(sphere_fs_in);
+  vec3 x1 = bump_position(sphere_fs_in+T*tf);
+  vec3 x2 = bump_position(sphere_fs_in+B*tf);
 
   vec3 delta1 = x-x1;
   vec3 delta2 = x-x2;
@@ -36,7 +35,7 @@ void main()
   vec3 normal = normalize(cross(delta1,delta2));
   if (dot(normal,sphere_fs_in) < 0) normal *= -1;
 
-  normal = (inverse(transpose(view*model(is_moon, animation_seconds))) * vec4(normal, 1.0)).xyz;
+  normal = (inverse(transpose(view*model(animation_seconds))) * vec4(normal, 1.0)).xyz;
 
 
   float theta = 0.2*M_PI*animation_seconds;
@@ -45,8 +44,8 @@ void main()
   float stripey = 0.5*sin(sphere_fs_in.y*perlin*7*M_PI)+1;
   float r = (stripex+stripey)/2;
 
-  vec3 ka = is_moon ? vec3(0.1,0.1,0.1) : vec3(0,0,0.1);
-  vec3 kd = is_moon ? vec3(0.5,0.5,0.5) : vec3(0.1*r,0.2*r,0.9*r);
+  vec3 ka = vec3(0.1,0.1,0.1);
+  vec3 kd = vec3(0.5,0.5,0.5);
   vec3 ks = vec3(0.3,0.3,0.3);
   float p = 1000;
   vec3 n = normalize(normal);

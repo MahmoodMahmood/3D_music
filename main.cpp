@@ -326,13 +326,20 @@ Usage:
     {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
-    for(int i = 0;i<2;i++)
-    {
-      glUniform1i(glGetUniformLocation(prog_id, "is_moon"), i==1);
-      glBindVertexArray(VAO);
-      glDrawElements(GL_PATCHES, F.size(), GL_UNSIGNED_INT, 0);
-      glBindVertexArray(0);
-    }
+
+    // only need to render 1 object for now, no moon
+    glBindVertexArray(VAO);
+    glDrawElements(GL_PATCHES, F.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    // removed moon object rendering
+    //for(int i = 0;i<2;i++)
+    //{
+      //glUniform1i(glGetUniformLocation(prog_id, "is_moon"), i==1);
+      //glBindVertexArray(VAO);
+      //glDrawElements(GL_PATCHES, F.size(), GL_UNSIGNED_INT, 0);
+      //glBindVertexArray(0);
+    //}
 
 
     glfwSwapBuffers(window);

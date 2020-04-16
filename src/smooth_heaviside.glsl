@@ -8,6 +8,6 @@
 // Returns scalar value 
 float smooth_heaviside( float x, float t)
 {
-  return (1./(1.+exp(-2.*t*(x)))-1./2.)/(1./(1.+exp(-2.*t*1.))-1./2.);
+  return (1./(1.+exp(-2.*t*x))-1./2.)/(1./(1.+exp(-2.*t*1.))-1./2.);
 }
 

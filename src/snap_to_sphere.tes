@@ -8,7 +8,6 @@ layout(triangles, equal_spacing, ccw) in;
 uniform mat4 view;
 uniform mat4 proj;
 uniform float animation_seconds;
-uniform bool is_moon;
 // Inputs:
 //                    array of 3 3D patch corner positions
 in vec4 pos_es_in[];
@@ -29,11 +28,7 @@ void main()
   // Replace with your code
 
   mat4 m;
-  if (is_moon) { // shrink by 70% = scale by 0.3 factor
-    m=model(is_moon, animation_seconds)*uniform_scale(0.3);
-  } else {
-    m=identity();
-  }
+  m=identity();
   mat4 mv = view*m;
 
   sphere_fs_in = normalize(interpolate(gl_TessCoord, pos_es_in[0].xyz, pos_es_in[1].xyz, pos_es_in[2].xyz));
