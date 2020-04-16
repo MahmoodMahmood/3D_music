@@ -20,6 +20,7 @@ import numpy as np
 
 CHUNK = 1024  
 VIZ_FILE = '/home/mahmood/CSC418/3D_music/src/planet.fs'
+BUMP_HEIGHT = '/home/mahmood/CSC418/3D_music/src/bump_height.glsl'
 
 def set_stripes(tempo):
     for line in fileinput.input(VIZ_FILE, inplace=True):
