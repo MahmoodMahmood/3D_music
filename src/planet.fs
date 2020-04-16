@@ -1,9 +1,3 @@
-// Generate a procedural planet and orbiting moon. Use layers of (improved)
-// Perlin noise to generate planetary features such as vegetation, gaseous
-// clouds, mountains, valleys, ice caps, rivers, oceans. Don't forget about the
-// moon. Use `animation_seconds` in your noise input to create (periodic)
-// temporal effects.
-//
 // Uniforms:
 uniform mat4 view;
 uniform mat4 proj;
@@ -36,20 +30,20 @@ void main()
 
   normal = (inverse(transpose(view*model(animation_seconds))) * vec4(normal, 1.0)).xyz;
 
-  float theta = 1.5*M_PI*animation_seconds;
-  //float theta = 0.01210552901097195;
+  //float_theta = 1.5*M_PI*animation_seconds;
+  float theta = -0.14087406740288563;
   float perlin = improved_perlin_noise(sphere_fs_in);
-  float stripex = 0.5*sin(sphere_fs_in.x*perlin*2*M_PI)+1;
-  float stripey = 10.5*sin(sphere_fs_in.y*perlin*7*M_PI)+1;
+  float stripex = 2*sin(normal_fs_in.x*perlin*7.599954044117647*M_PI)+1;
+  float stripey = 2*sin(normal_fs_in.x*perlin*1.8999885110294117*M_PI)+1;
   float r = (stripex+stripey)/2;
 
   vec3 ka = vec3(0.1,0.1,0.1);
-  vec3 kd = vec3(1.5*r,0.5*r,0.5*r);
+  vec3 kd = vec3(1.5/r,0,0.09114962904361903);
   vec3 ks = vec3(0.3,0.3,0.3);
-  float p = 1000;
+  float p = 100;
   vec3 n = normalize(normal);
   vec3 v = -normalize(view_pos_fs_in.xyz); 
-  vec3 l = normalize(vec3(sin(theta), 1, cos(theta)));
+  vec3 l = normalize(vec3(sin(theta), 0.5, cos(theta)));
 
   //color = 0.5+0.5*n;
   color = blinn_phong(ka,kd,ks,p,n,v,l);

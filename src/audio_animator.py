@@ -10,6 +10,7 @@ __license__ = "MIT"
 import os
 import sys
 import wave
+import math
 import time
 import struct
 import pyaudio
@@ -20,18 +21,34 @@ import numpy as np
 CHUNK = 1024  
 VIZ_FILE = '/home/mahmood/CSC418/3D_music/src/planet.fs'
 
+def set_stripes(tempo):
+    for line in fileinput.input(VIZ_FILE, inplace=True):
+        if 'float stripex' in line:
+            line = '  float stripex = 2*sin(normal_fs_in.x*perlin*'+ str(tempo/20) +'*M_PI)+1;\n'
+        elif 'float stripey' in line:
+            line = '  float stripey = 2*sin(normal_fs_in.x*perlin*' + str(tempo/80) + '*M_PI)+1;\n'
+        sys.stdout.write(line)
+
+
 def updateTheta(newTheta):
     for line in fileinput.input(VIZ_FILE, inplace=True):
         if 'float theta' in line:
-            l = '  float theta = ' + str(newTheta) + ';'
-            sys.stdout.write(l)
-        else:
-            sys.stdout.write(line)
+            line = '  float theta = ' + str(newTheta) + ';\n'
+        sys.stdout.write(line)
+        
+def colorChanger(time_to_next_beat):
+    if (time_to_next_beat < 0.1):
+        for line in fileinput.input(VIZ_FILE, inplace=True):
+            if 'vec3 kd' in line:
+                line = '  vec3 kd = vec3(1.5/r,0,'+ str((0.1-time_to_next_beat)) + ');\n'
+            sys.stdout.write(line)   
 
 def main(music_file):
     """ Main entry point of the app """
     y, sr = librosa.load(music_file)
     tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
+    set_stripes(tempo)
+
     print('Estimated tempo: {:.2f} beats per minute'.format(tempo))
     beat_times = librosa.frames_to_time(beat_frames, sr=sr)
 
@@ -52,7 +69,7 @@ def main(music_file):
         cur_time = time.time()-start
         
         if beat_idx < len(beat_times):
-            updateTheta(cur_time - beat_times[beat_idx])
+            updateTheta((cur_time - beat_times[beat_idx])/(beat_times[beat_idx]-beat_times[beat_idx-1])*2*math.pi)
          
             if cur_time > beat_times[beat_idx]:
                 for i in range(10): 
@@ -62,6 +79,9 @@ def main(music_file):
                         print("*************************************")
                 print("time since last beat: {}".format(cur_time-beat_times[beat_idx-1]))
                 beat_idx+=1
+            else:
+                colorChanger(beat_times[beat_idx] - cur_time);
+
     
     stream.stop_stream()  
     stream.close()  
