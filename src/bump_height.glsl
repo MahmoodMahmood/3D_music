@@ -31,10 +31,10 @@ float octavian(vec3 s)
 
 float bump_height(vec3 s)
 {
-  float waviness = 4;
-  float bump_amplitude = 20;
+  float waviness = 1.4245145136117936;
+  float bump_amplitude = 18.94884705543518;
   float constant_offset = 10;
-  float perlin_factor = 2;
+  float perlin_factor = 3;
 
   float perlin = perlin_factor*octavian(s);
   float noise = constant_offset + bump_amplitude * sin(waviness * M_PI * (s.x + perlin));

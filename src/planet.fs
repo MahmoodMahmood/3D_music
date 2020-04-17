@@ -31,14 +31,14 @@ void main()
   normal = (inverse(transpose(view*model(animation_seconds))) * vec4(normal, 1.0)).xyz;
 
   //float_theta = 1.5*M_PI*animation_seconds;
-  float theta = -0.14087406740288563;
+  float theta = 1.183244057322245;
   float perlin = improved_perlin_noise(sphere_fs_in);
   float stripex = 2*sin(normal_fs_in.x*perlin*7.599954044117647*M_PI)+1;
   float stripey = 2*sin(normal_fs_in.x*perlin*1.8999885110294117*M_PI)+1;
   float r = (stripex+stripey)/2;
 
   vec3 ka = vec3(0.1,0.1,0.1);
-  vec3 kd = vec3(1.5/r,0,0.09114962904361903);
+  vec3 kd = vec3(1.5/r,0,0.0662419330276322);
   vec3 ks = vec3(0.3,0.3,0.3);
   float p = 100;
   vec3 n = normalize(normal);

@@ -20,7 +20,7 @@ import numpy as np
 
 CHUNK = 1024  
 VIZ_FILE = '/home/mahmood/CSC418/3D_music/src/planet.fs'
-BUMP_HEIGHT = '/home/mahmood/CSC418/3D_music/src/bump_height.glsl'
+BUMP_FILE = '/home/mahmood/CSC418/3D_music/src/bump_height.glsl'
 
 def set_stripes(tempo):
     for line in fileinput.input(VIZ_FILE, inplace=True):
@@ -43,6 +43,18 @@ def colorChanger(time_to_next_beat):
             if 'vec3 kd' in line:
                 line = '  vec3 kd = vec3(1.5/r,0,'+ str((0.1-time_to_next_beat)) + ');\n'
             sys.stdout.write(line)   
+
+def updateBumps(time_to_next_beat, intensity):
+    for line in fileinput.input(BUMP_FILE, inplace=True):
+        if 'float waviness' in line:
+            line = '  float waviness = ' + str((intensity)**2/100**2) + ';\n'
+        if 'float bump_amplitude' in line:
+            line = '  float bump_amplitude = ' + str((intensity-115)**2) + ';\n' 
+        sys.stdout.write(line) 
+
+def getSoundIntensity(data):
+    return sum(data)/len(data)
+
 
 def main(music_file):
     """ Main entry point of the app """
@@ -70,18 +82,21 @@ def main(music_file):
         cur_time = time.time()-start
         
         if beat_idx < len(beat_times):
-            updateTheta((cur_time - beat_times[beat_idx])/(beat_times[beat_idx]-beat_times[beat_idx-1])*2*math.pi)
-         
             if cur_time > beat_times[beat_idx]:
-                for i in range(10): 
-                    if beat_idx % 2: 
-                        print("#####################################") 
-                    else: 
-                        print("*************************************")
-                print("time since last beat: {}".format(cur_time-beat_times[beat_idx-1]))
+                #for i in range(10): 
+                    #if beat_idx % 2: 
+                        #print("#####################################") 
+                    #else: 
+                        #print("*************************************")
+                #print("time since last beat: {}".format(cur_time-beat_times[beat_idx-1]))
                 beat_idx+=1
             else:
-                colorChanger(beat_times[beat_idx] - cur_time);
+                x1 = beat_times[beat_idx] - cur_time
+                spacing = beat_times[beat_idx] - beat_times[beat_idx-1] 
+                theta = (x1/spacing)*2*math.pi
+                updateTheta(theta)
+                colorChanger(theta)
+                updateBumps(x1, getSoundIntensity(data))
 
     
     stream.stop_stream()  
@@ -120,7 +135,7 @@ if __name__ == "__main__":
         #data_int = struct.unpack(str(4*CHUNK) + 'B', data)
         #data_np = np.array(data_int, dtype='b')[::2] + 128
         ##data_np = np.array(data_int)
-        #w = np.fft.fft(data_np)[1:]
+        #w = np.fft.fft(data_np)
         #freqs = np.fft.fftfreq(len(w))
         #idx = (np.abs(w)).argsort()[:10][::-1]
         #freq = np.array([freqs[i] for i in idx])
